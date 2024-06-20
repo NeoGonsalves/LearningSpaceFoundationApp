@@ -1,7 +1,8 @@
 {
   "expo": {
     "name": "Learning Space Foundation",
-    "slug": "FirstApp",
+    "slug": "Learning-space-foundation",
+    "description":"This is an Application for the Learning Space Foundation NGO",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./App/assets/icon.png",
@@ -22,7 +23,7 @@
       "package": "com.neogonsalves.firstapp"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
     }
   }
 }
