@@ -9,24 +9,53 @@ const Drawer = createDrawerNavigator();
 
 function AboutUsScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>About Us Screen</Text>
+    <SafeAreaView>
+    <ScrollView>
+    <View style={styles.AboutUsScreen}>
+      <Image style={styles.image}
+              resizeMode="contain"
+              fadeDuration={3000}
+              source={require('./App/assets/ourworkimg.jpg')}
+            />
+            <Text style={styles.titles}>HOW WE STARTED</Text>
+      <Text style={styles.AboutUsScreentxt}>Learning Space started in 2014 as a charitable organization by conviction. The founder being an engineer, academia and trainer with 20+ years of experience in the IT industry in the US and India and IIIT-H, our journey started as the training cum implementation partner for a 2-year Science,
+         Technology, Engineering and Mathematics (STEM) project for 16 Rainbow Homes in the twin cities of Hyderabad and Secunderabad. This project aimed at improving learning abilities of ~1300 children taking shelter in these orphanages using technology aided teaching and learning.
+
+Later, we handled training and implementation of another STEM project for about 12,000 less privileged students
+ studying at 88 government primary, upper-primary and high schools of Nampally and Khairatabad Mandals in Hyderabad.
+  We also worked with some other NGOs such as Move the Wheel Foundation, Association for Promoting Social Action 
+  (APSA) and Suma Niketan in the field of education.</Text>
+  <Text style={styles.titles}>HOW FOCUS SHIFTED TO PREVENTION OF CSA.</Text>
+  <Image style={styles.image}
+              resizeMode="contain"
+              fadeDuration={3000}
+              source={require('./App/assets/ourwork2.jpg')}
+            />
+  <Text style={styles.AboutUsScreentxt}>During that period, a child sexual abuse crisis came to light which made us wonder why services were only available after a child was abused. Also, there is a lot stigma around this issue which makes the survivors suffer in silence and which makes the perpetrators take advantage of this stigma and silence. Our founder asked herself a question: “what can I do to prevent abuse and keep children safe?” She mobilized a few volunteers to create an initiative around educating children about personal safety.
+In Dec 2018, Learning Space Foundation was registered as a public charitable trust.
+We then mobilized more like-minded people and started working with students from various schools for one year, until pandemic occurred. There was no access to children due to the lockdowns and schools having online classes etc. The Child helpline in India received many calls from children and it triggered a lot of conversations around safety of children who are trapped at homes along with their abusers. That is when we realized the need to find other ways to stop child sexual abuse. Also, as abuse is a power dynamic where more powerful person forces themselves upon a less powerful person, children being less powerful, educating them to protect themselves is really not enough. As adults are legally and morally responsible for the health and safety of the children, burden of prevention and protection is the responsibility of adults.
+So, we refined our mission to include adult education, we started our flagship training, ‘Sreyobhilaashi.’ We aim to empower adults and organizations to bring best practices in child safety in their own communities.
+While were working with schools, another incident came to light. Chotu (name changed to protect privacy) is an intelligent youth, but unaware of the child marriage act and POCSO, married a minor girl against elders’ wish and landed in jail. Most of them being first generation learners, they have little knowledge about law and how their actions and decisions can destroy their dignity and future. So, we realized the need to create awareness among adolescents about laws related to them.
+We envision a world where child sexual abuse does not exist and children live with dignity. We believe prevention is possible if we all come together. We dream of the day that adults have formed prevention-oriented communities where children’s rights to a safe childhood are protected.</Text>
+    
     </View>
+    </ScrollView>
+    </SafeAreaView>
   );
 }
 
 function OurWorkScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Our Work Screen</Text>
+    <View style={styles.OurWorkScreen}>
+      <Text style={styles.OurWorkScreenScreentxt}>Our Work Screen</Text>
     </View>
   );
 }
 
 function ResourcesScreen() {
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-      <Text>Resources Screen</Text>
+    <View style={styles.ResourcesScreen}>
+      <Text style={styles.ResourcesScreentxt}>Resources Screen</Text>
     </View>
   );
 }
@@ -51,7 +80,10 @@ function HomeScreen({ navigation }) {
       "You wish to be redirected to a Payment gateway:",
       null,
       [
-        { text: 'Agree' }, // onPress: () => Linking.openURL('') 
+        { text: 'Agree', 
+          onPress: () => Linking.openURL('https://learningspace.co.in/become-a-donor/')
+        }, 
+
         { text: 'No' }
       ]
     );
@@ -100,7 +132,7 @@ function HomeScreen({ navigation }) {
 
 export default function App() {
   return (
-    <NavigationContainer>
+    <NavigationContainer style={styles.navigation}>
       <Drawer.Navigator style={styles.Home} initialRouteName="Home">
         <Drawer.Screen name="Home"   component={HomeScreen} />
         <Drawer.Screen name="About Us" component={AboutUsScreen} />
@@ -112,6 +144,61 @@ export default function App() {
 }
 
 const styles = StyleSheet.create({
+  navigation:{
+    backgroundColor:'tan'
+  },
+  AboutUsScreen:{
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor:'tan',
+    paddingTop:0,
+    margin:0,
+  },
+  
+  titles:{
+    fontWeight:'bold',
+    fontSize:24,
+    color:'white',
+    paddingTop:20,
+    paddingBottom:20,
+  },
+  AboutUsScreentxt:{
+    fontSize: 16,
+    color: 'antiquewhite',
+    paddingLeft:10,
+    paddingRight:10,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  OurWorkScreenScreen:{
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor:'tan',
+    paddingTop:10,
+    margin:20,
+  },
+  OurWorkScreentxt:{
+    fontSize: 16,
+    color: 'antiquewhite',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  ResourcesScreen:{
+    flex:1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor:'Tan',
+    paddingTop:10,
+    margin:20,
+  },
+  ResourcesScreentxt:{
+    fontSize: 16,
+    color: 'antiquewhite',
+    marginBottom: 20,
+    textAlign: 'center',
+  },
   safeArea: {
     flex: 1,
     backgroundColor: 'tan',
