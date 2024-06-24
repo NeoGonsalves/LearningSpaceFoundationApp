@@ -5,14 +5,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
-//import SelectList from 'react-native-dropdown-list'
-//import RNPickerSelect from 'react-native-picker-select';
-//import {Dropdown}from 'react-native-material-dropdown';
- 
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Drawer = createDrawerNavigator();
-
-//const [selectedValue, setSelectedValue] = useState("java");
+const Tab = createBottomTabNavigator();
 
 function AboutUsScreen() {
   return (
@@ -49,7 +45,15 @@ function AboutUsScreen() {
   );
 }
 
-function Courses() {
+function SettingsScreen() {
+  return (
+    <View style={styles.centered}>
+      <Text>Settings!</Text>
+    </View>
+  );
+}
+
+function CoursesScreen() {
   return (
     <View style={styles.courses}>
     <YoutubePlayer
@@ -63,11 +67,11 @@ function Courses() {
 
 function ResourcesScreen() {
   return (
-   <View>
-    <Text>Resourse Screen</Text>
-   </View>
+    <View style={styles.centered}>
+      <Text>Resource Screen</Text>
+    </View>
   );
-};
+}
 
 function HomeScreen({ navigation }) {
   const handleDonatePress = () => {
@@ -102,11 +106,7 @@ function HomeScreen({ navigation }) {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
-        
-          <TouchableOpacity
-            onPress={handleDonatePress}
-            style={styles.touchableOpacity}
-          >
+          <TouchableOpacity onPress={handleDonatePress} style={styles.touchableOpacity}>
             <Image
               fadeDuration={3000}
               source={require('./App/assets/Learning-Space-Logo-for-WebSite-Yellow.png')}
@@ -115,17 +115,14 @@ function HomeScreen({ navigation }) {
             />
           </TouchableOpacity>
           <Text style={styles.text}>
-            Learning Space Foundation is a registered public charitable trust striving to advance children’s and women’s rights for safety, education and health, thus creating a lasting impact in the lives of vulnerable children, women and their communities.
+          Learning Space Foundation is a registered public charitable trust striving to advance children’s and women’s rights for safety, education and health, thus creating a lasting impact in the lives of vulnerable children, women and their communities.
 
-            Our major focus area is prevention of Child Sexual Abuse (CSA). We provide personal safety education to children and empower adults to prevent, recognize, and react responsibly to child sexual abuse through awareness, education, and stigma reduction.
+Our major focus area is prevention of Child Sexual Abuse (CSA). We provide personal safety education to children and empower adults to prevent, recognize, and react responsibly to child sexual abuse through awareness, education, and stigma reduction.
 
-            Our other areas of work include menstrual hygiene management, supporting education and raising awareness on mental health & safety of women. We conduct various awareness sessions, provide support with infrastructure and basic needs to the less privileged.
+Our other areas of work include menstrual hygiene management, supporting education and raising awareness on mental health & safety of women. We conduct various awareness sessions, provide support with infrastructure and basic needs to the less privileged.
           </Text>
 
-          <TouchableOpacity
-            onPress={handlePaymentPress}
-            style={styles.button}
-          >
+          <TouchableOpacity onPress={handlePaymentPress} style={styles.button}>
             <Text style={styles.buttonText}>Make a Difference</Text>
           </TouchableOpacity>
         </View>
@@ -135,23 +132,34 @@ function HomeScreen({ navigation }) {
   );
 }
 
-export default function App() {
+function MyTabs() {
   return (
-    <NavigationContainer style={styles.navigation}>
-      <Drawer.Navigator screenOptions={{
-        drawerStyle: {
-          backgroundColor: 'tan',
-        },
-        headerStyle: {
-          backgroundColor: 'tan', 
-        },
-         
-      
-      }} initialRouteName="Home">
-        <Drawer.Screen name="Home" component={HomeScreen} />
+    <Tab.Navigator>
+      <Tab.Screen name="Home" component={HomeScreen} style={styles.Hometab} />
+      <Tab.Screen name="Courses" component={CoursesScreen} style={styles.coursetab} />
+      <Tab.Screen name="Settings" component={SettingsScreen} style={styles.settingstab} />
+    </Tab.Navigator>
+  );
+}
+
+function App() {
+  return (
+    <NavigationContainer>
+      <Drawer.Navigator
+        screenOptions={{
+          drawerStyle: {
+            backgroundColor: 'tan',
+          },
+          headerStyle: {
+            backgroundColor: 'tan',
+          },
+        }}
+        initialRouteName="Home"
+      >
+        <Drawer.Screen name="Home" component={MyTabs}/>
         <Drawer.Screen name="About Us" component={AboutUsScreen} />
         <Drawer.Screen name="Resources" component={ResourcesScreen} />
-        <Drawer.Screen name="Courses" component={Courses} />
+        <Drawer.Screen name="Courses" component={CoursesScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -159,7 +167,7 @@ export default function App() {
 
 const styles = StyleSheet.create({
   navigation: {
-    backgroundColor: 'tan'
+    backgroundColor: 'tan',
   },
   AboutUsScreen: {
     flex: 1,
@@ -184,14 +192,6 @@ const styles = StyleSheet.create({
     marginBottom: 20,
     textAlign: 'center',
   },
-  /*courses: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'tan',
-    paddingTop: 10,
-    margin: 20,
-  },*/
   coursestxt: {
     fontSize: 16,
     color: 'antiquewhite',
@@ -202,7 +202,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'Tan',
+    backgroundColor: 'tan',
     paddingTop: 10,
     margin: 20,
   },
@@ -226,7 +226,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   text: {
-    fontSize: 16,
+    fontSize: 18,
     color: 'antiquewhite',
     marginBottom: 10,
     textAlign: 'center',
@@ -249,7 +249,11 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
   },
-  Home: {
-    color: 'tan'
-  }
+  centered: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
 });
+
+export default App;

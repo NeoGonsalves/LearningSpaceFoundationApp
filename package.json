@@ -12,6 +12,7 @@
     "@expo/metro-runtime": "~3.2.1",
     "@react-native-community/cli-server-api": "^13.6.9",
     "@react-native-community/masked-view": "^0.1.11",
+    "@react-navigation/bottom-tabs": "^6.5.20",
     "@react-navigation/drawer": "^6.6.15",
     "@react-navigation/native": "^6.1.17",
     "expo": "^51.0.14",
