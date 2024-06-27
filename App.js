@@ -1,14 +1,32 @@
 import 'react-native-gesture-handler';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import React from 'react';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking } from 'react-native';
+import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 const Drawer = createDrawerNavigator();
-const Tab = createBottomTabNavigator();
+const sampleCourses = [
+  'Course 1',
+  'Course 2',
+  'Course 3',
+  'Course 4',
+];
+
+function DonateScreen() {
+  return (
+    <ScrollView>
+      <View>
+        <Image
+          resizeMode='contain'
+          style={styles.DonateScreen}
+          source={require('./App/assets/QRDonation.png')}
+        />
+      </View>
+    </ScrollView>
+  );
+}
 
 function AboutUsScreen() {
   return (
@@ -45,23 +63,48 @@ function AboutUsScreen() {
   );
 }
 
-function SettingsScreen() {
-  return (
-    <View style={styles.centered}>
-      <Text>Settings!</Text>
-    </View>
-  );
-}
-
 function CoursesScreen() {
+  const [query, setQuery] = useState('');
+  const [filteredCourses, setFilteredCourses] = useState(sampleCourses);
+
+  const handleSearch = (text) => {
+    setQuery(text);
+    if (text) {
+      const newData = sampleCourses.filter(course => {
+        const courseData = course.toUpperCase();
+        const textData = text.toUpperCase();
+        return courseData.indexOf(textData) > -1;
+      });
+      setFilteredCourses(newData);
+    } else {
+      setFilteredCourses(sampleCourses);
+    }
+  };
+
+  const handleCoursePress = (course) => {
+
+  };
+
   return (
-    <View style={styles.courses}>
-    <YoutubePlayer
-      height={300}
-      play={true}
-      videoId={'E5_ccmHk_TY?si=DVIyXsPDo2xmL1q2'}
-    />
-  </View>
+    <SafeAreaView style={styles.safeArea}>
+      <View style={styles.searchContainer}>
+        <TextInput
+          style={styles.searchBar}
+          placeholder="Search Courses..."
+          value={query}
+          onChangeText={handleSearch}
+        />
+        <FlatList
+          data={filteredCourses}
+          keyExtractor={(item, index) => index.toString()}
+          renderItem={({ item }) => (
+            <TouchableOpacity onPress={() => handleCoursePress(item)}>
+              <Text style={styles.courseItem}>{item}</Text>
+            </TouchableOpacity>
+          )}
+        />
+      </View>
+    </SafeAreaView>
   );
 }
 
@@ -115,30 +158,39 @@ function HomeScreen({ navigation }) {
             />
           </TouchableOpacity>
           <Text style={styles.text}>
-          Learning Space Foundation is a registered public charitable trust striving to advance children’s and women’s rights for safety, education and health, thus creating a lasting impact in the lives of vulnerable children, women and their communities.
+            Learning Space Foundation is a registered public charitable trust striving to advance children’s and women’s rights for safety, education and health, thus creating a lasting impact in the lives of vulnerable children, women and their communities.
 
-Our major focus area is prevention of Child Sexual Abuse (CSA). We provide personal safety education to children and empower adults to prevent, recognize, and react responsibly to child sexual abuse through awareness, education, and stigma reduction.
+            Our major focus area is prevention of Child Sexual Abuse (CSA). We provide personal safety education to children and empower adults to prevent, recognize, and react responsibly to child sexual abuse through awareness, education, and stigma reduction.
 
-Our other areas of work include menstrual hygiene management, supporting education and raising awareness on mental health & safety of women. We conduct various awareness sessions, provide support with infrastructure and basic needs to the less privileged.
+            Our other areas of work include menstrual hygiene management, supporting education and raising awareness on mental health & safety of women. We conduct various awareness sessions, provide support with infrastructure and basic needs to the less privileged.
           </Text>
 
-          <TouchableOpacity onPress={handlePaymentPress} style={styles.button}>
+          <TouchableOpacity onPress={() => navigation.navigate('Donate')} style={styles.button}>
             <Text style={styles.buttonText}>Make a Difference</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <StatusBar style="light" backgroundColor="tan" />
+      <StatusBar barStyle="dark-content"  backgroundColor="tan"  /> 
     </SafeAreaView>
   );
 }
 
-function MyTabs() {
+function CustomDrawerContent(props) {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Home" component={HomeScreen} style={styles.Hometab} />
-      <Tab.Screen name="Courses" component={CoursesScreen} style={styles.coursetab} />
-      <Tab.Screen name="Settings" component={SettingsScreen} style={styles.settingstab} />
-    </Tab.Navigator>
+    <DrawerContentScrollView {...props} style={styles.drawerContent}>
+      <View style={styles.drawerHeader}>
+        <Image
+          source={require('./App/assets/Learning-Space-Logo-for-WebSite-Yellow.png')}
+          resizeMode="contain"
+          style={styles.drawerImage}
+        />
+      </View>
+      <DrawerItemList {...props} />
+      <DrawerItem
+        label="Help"
+        onPress={() => Alert.alert('Link to help')}
+      />
+    </DrawerContentScrollView>
   );
 }
 
@@ -146,6 +198,7 @@ function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
+        drawerContent={props => <CustomDrawerContent {...props} />}
         screenOptions={{
           drawerStyle: {
             backgroundColor: 'tan',
@@ -156,10 +209,11 @@ function App() {
         }}
         initialRouteName="Home"
       >
-        <Drawer.Screen name="Home" component={MyTabs}/>
+        <Drawer.Screen name="Home" component={HomeScreen} />
         <Drawer.Screen name="About Us" component={AboutUsScreen} />
         <Drawer.Screen name="Resources" component={ResourcesScreen} />
         <Drawer.Screen name="Courses" component={CoursesScreen} />
+        <Drawer.Screen name="Donate" component={DonateScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -176,6 +230,12 @@ const styles = StyleSheet.create({
     backgroundColor: 'tan',
     paddingTop: 0,
     margin: 0,
+  },
+  DonateScreen: {
+    width: 200,
+    height: 400,
+    justifyContent:'center',
+    alignContent:'center'
   },
   titles: {
     fontWeight: 'bold',
@@ -253,6 +313,42 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  searchContainer: {
+    padding: 10,
+    backgroundColor: 'tan',
+  },
+  searchBar: {
+    height: 40,
+    borderColor: 'black',
+    borderWidth: 1,
+    paddingLeft: 10,
+    borderRadius: 5,
+    marginBottom: 10,
+    backgroundColor: 'wheat',
+  },
+  courseItem: {
+    padding: 10,
+    fontSize: 18,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    color: 'black',
+  },
+  drawerContent: {
+    backgroundColor: 'tan',
+  },
+  drawerHeader: {
+    height: 150,
+    backgroundColor: 'tan',
+    justifyContent: 'center',
+    alignItems: 'center',
+    
+  },
+  drawerImage: {
+    width: 100,
+    height: 100,
+    borderRadius: 50,
+    
   },
 });
 
