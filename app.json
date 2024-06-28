@@ -2,7 +2,7 @@
   "expo": {
     "name": "Learning Space Foundation",
     "slug": "Learning-space-foundation",
-    "description":"This is an Application for the Learning Space Foundation NGO",
+    "description": "This is an Application for the Learning Space Foundation NGO",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./App/assets/icon.png",
@@ -24,6 +24,9 @@
     },
     "web": {
       "favicon": "./assets/icon.png"
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }

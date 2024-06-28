@@ -1,27 +1,71 @@
 import 'react-native-gesture-handler';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
 import YoutubePlayer from 'react-native-youtube-iframe';
 
 const Drawer = createDrawerNavigator();
+const Stack = createStackNavigator();
+
 const sampleCourses = [
-  'Course 1',
-  'Course 2',
-  'Course 3',
-  'Course 4',
+  { name: 'Course 1', screen: 'Course1Screen' },
+  { name: 'Course 2', screen: 'Course2Screen' },
+  { name: 'Course 3', screen: 'Course3Screen' },
+  { name: 'Course 4', screen: 'Course4Screen' },
 ];
+
+function Course1Screen() {
+  return (
+    <View style={styles.ResourcesScreen}>
+      <YoutubePlayer
+      height={300}
+      play={true}
+      videoId={'E5_ccmHk_TY'}
+    />
+    </View>
+  );
+}
+
+function Course2Screen() {
+  return (
+    <View style={styles.ResourcesScreen}>
+      <Text>Course 2 Content</Text>
+    </View>
+  );
+}
+
+function Course3Screen() {
+  return (
+    <View style={styles.ResourcesScreen}>
+      <Text>Course 3 Content</Text>
+    </View>
+  );
+}
+
+function Course4Screen() {
+  return (
+    <View style={styles.ResourcesScreen}>
+      <Text>Course 4 Content</Text>
+    </View>
+  );
+}
 
 function DonateScreen() {
   return (
-    <ScrollView>
-      <View>
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.imageContainer}>
         <Image
-          resizeMode='contain'
-          style={styles.DonateScreen}
           source={require('./App/assets/QRDonation.png')}
+          resizeMode='contain'
+          style={styles.image}
+        />
+        <Image
+          source={require('./App/assets/DonateDetails.png')}
+          resizeMode='contain'
+          style={styles.image}
         />
       </View>
     </ScrollView>
@@ -46,7 +90,6 @@ function AboutUsScreen() {
           </Text>
           <Text style={styles.titles}>HOW FOCUS SHIFTED TO PREVENTION OF CSA.</Text>
           <Image style={styles.image}
-            resizeMode="contain"
             fadeDuration={3000}
             source={require('./App/assets/ourwork2.jpg')}
           />
@@ -63,7 +106,7 @@ function AboutUsScreen() {
   );
 }
 
-function CoursesScreen() {
+function CoursesScreen({ navigation }) {
   const [query, setQuery] = useState('');
   const [filteredCourses, setFilteredCourses] = useState(sampleCourses);
 
@@ -71,7 +114,7 @@ function CoursesScreen() {
     setQuery(text);
     if (text) {
       const newData = sampleCourses.filter(course => {
-        const courseData = course.toUpperCase();
+        const courseData = course.name.toUpperCase();
         const textData = text.toUpperCase();
         return courseData.indexOf(textData) > -1;
       });
@@ -81,8 +124,8 @@ function CoursesScreen() {
     }
   };
 
-  const handleCoursePress = (course) => {
-
+  const handleCoursePress = (screen) => {
+    navigation.navigate(screen);
   };
 
   return (
@@ -90,7 +133,7 @@ function CoursesScreen() {
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchBar}
-          placeholder="Search Courses..."
+          placeholder="Find..."
           value={query}
           onChangeText={handleSearch}
         />
@@ -98,8 +141,8 @@ function CoursesScreen() {
           data={filteredCourses}
           keyExtractor={(item, index) => index.toString()}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => handleCoursePress(item)}>
-              <Text style={styles.courseItem}>{item}</Text>
+            <TouchableOpacity onPress={() => handleCoursePress(item.screen)}>
+              <Text style={styles.courseItem}>{item.name}</Text>
             </TouchableOpacity>
           )}
         />
@@ -110,7 +153,7 @@ function CoursesScreen() {
 
 function ResourcesScreen() {
   return (
-    <View style={styles.centered}>
+    <View style={styles.ResourcesScreen}>
       <Text>Resource Screen</Text>
     </View>
   );
@@ -127,20 +170,6 @@ function HomeScreen({ navigation }) {
           onPress: () => Linking.openURL('https://www.youtube.com/watch?v=pHekp0tRrDA&pp=ygUibGVhcm5pbmcgc3BhY2UgZm91bmRhdGlvbiBoeWRyYWJhZA%3D%3D')
         },
         { text: 'No, thanks.' }
-      ]
-    );
-  };
-
-  const handlePaymentPress = () => {
-    Alert.alert(
-      "You wish to be redirected to a Payment gateway:",
-      null,
-      [
-        {
-          text: 'Agree',
-          onPress: () => Linking.openURL('https://learningspace.co.in/become-a-donor/')
-        },
-        { text: 'No' }
       ]
     );
   };
@@ -165,31 +194,22 @@ function HomeScreen({ navigation }) {
             Our other areas of work include menstrual hygiene management, supporting education and raising awareness on mental health & safety of women. We conduct various awareness sessions, provide support with infrastructure and basic needs to the less privileged.
           </Text>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Donate')} style={styles.button}>
-            <Text style={styles.buttonText}>Make a Difference</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('DonateScreen')} style={styles.donateButton}>
+            <Text style={styles.donateButtonText}>Make A Diffrence</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <StatusBar barStyle="dark-content"  backgroundColor="tan"  /> 
+      <StatusBar barStyle="dark-content" backgroundColor="tan" />
     </SafeAreaView>
   );
 }
 
 function CustomDrawerContent(props) {
   return (
-    <DrawerContentScrollView {...props} style={styles.drawerContent}>
-      <View style={styles.drawerHeader}>
-        <Image
-          source={require('./App/assets/Learning-Space-Logo-for-WebSite-Yellow.png')}
-          resizeMode="contain"
-          style={styles.drawerImage}
-        />
-      </View>
+    <DrawerContentScrollView {...props}>
       <DrawerItemList {...props} />
-      <DrawerItem
-        label="Help"
-        onPress={() => Alert.alert('Link to help')}
-      />
+      <DrawerItem label="Donate" onPress={() => props.navigation.navigate('DonateScreen')} />
+      <DrawerItem label="About Us" onPress={() => props.navigation.navigate('AboutUsScreen')} />
     </DrawerContentScrollView>
   );
 }
@@ -199,78 +219,48 @@ function App() {
     <NavigationContainer>
       <Drawer.Navigator
         drawerContent={props => <CustomDrawerContent {...props} />}
-        screenOptions={{
-          drawerStyle: {
-            backgroundColor: 'tan',
-          },
-          headerStyle: {
-            backgroundColor: 'tan',
-          },
+        drawerStyle={{
+          backgroundColor: 'tan', // Change background color here
         }}
-        initialRouteName="Home"
       >
         <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="About Us" component={AboutUsScreen} />
-        <Drawer.Screen name="Resources" component={ResourcesScreen} />
-        <Drawer.Screen name="Courses" component={CoursesScreen} />
-        <Drawer.Screen name="Donate" component={DonateScreen} />
+        <Drawer.Screen name="Courses" component={CoursesStack} />
+        <Drawer.Screen name="DonateScreen" component={DonateScreen} />
+        <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
+        <Drawer.Screen name="ResourcesScreen" component={ResourcesScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
 }
 
+function CoursesStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Courses" component={CoursesScreen} />
+      <Stack.Screen name="Course1Screen" component={Course1Screen} />
+      <Stack.Screen name="Course2Screen" component={Course2Screen} />
+      <Stack.Screen name="Course3Screen" component={Course3Screen} />
+      <Stack.Screen name="Course4Screen" component={Course4Screen} />
+    </Stack.Navigator>
+  );
+}
+
 const styles = StyleSheet.create({
-  navigation: {
-    backgroundColor: 'tan',
-  },
-  AboutUsScreen: {
+  container: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: 'tan',
-    paddingTop: 0,
-    margin: 0,
+    paddingVertical: 20,
   },
-  DonateScreen: {
-    width: 200,
-    height: 400,
-    justifyContent:'center',
-    alignContent:'center'
-  },
-  titles: {
-    fontWeight: 'bold',
-    fontSize: 24,
-    color: 'white',
-    paddingTop: 20,
-    paddingBottom: 20,
-  },
-  AboutUsScreentxt: {
-    fontSize: 16,
-    color: 'antiquewhite',
-    paddingLeft: 10,
-    paddingRight: 10,
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  coursestxt: {
-    fontSize: 16,
-    color: 'antiquewhite',
-    marginBottom: 20,
-    textAlign: 'center',
-  },
-  ResourcesScreen: {
-    flex: 1,
-    justifyContent: 'center',
+  imageContainer: {
     alignItems: 'center',
-    backgroundColor: 'tan',
-    paddingTop: 10,
-    margin: 20,
   },
-  ResourcesScreentxt: {
-    fontSize: 16,
-    color: 'antiquewhite',
+  image: {
+    width: '90%',
+    height: undefined,
+    aspectRatio: 1,
     marginBottom: 20,
-    textAlign: 'center',
   },
   safeArea: {
     flex: 1,
@@ -291,28 +281,19 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     textAlign: 'center',
   },
-  image: {
-    width: 300,
-    height: 200,
-    marginBottom: 20,
-  },
   touchableOpacity: {
     padding: 10,
   },
-  button: {
+  donateButton: {
     backgroundColor: 'wheat',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
+    marginBottom: 10,
   },
-  buttonText: {
+  donateButtonText: {
     color: 'black',
     fontSize: 16,
-  },
-  centered: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   searchContainer: {
     padding: 10,
@@ -334,21 +315,37 @@ const styles = StyleSheet.create({
     borderBottomColor: '#ccc',
     color: 'black',
   },
-  drawerContent: {
-    backgroundColor: 'tan',
-  },
-  drawerHeader: {
-    height: 150,
-    backgroundColor: 'tan',
+  AboutUsScreen: {
+    flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    
+    backgroundColor: 'tan',
+    paddingTop: 0,
+    margin: 0,
   },
-  drawerImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    
+  titles: {
+    fontWeight: 'bold',
+    fontSize: 24,
+    color: 'white',
+    paddingTop: 20,
+    paddingBottom: 20,
+  },
+  AboutUsScreentxt: {
+    fontSize: 16,
+    color: 'antiquewhite',
+    paddingLeft: 10,
+    paddingRight: 10,
+    marginBottom: 20,
+    textAlign: 'center',
+    fontFamily: 'Playwrite',
+  },
+  ResourcesScreen: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'tan',
+    paddingTop: 10,
+    margin: 20,
   },
 });
 
