@@ -23,10 +23,15 @@
       "package": "com.neogonsalves.firstapp"
     },
     "web": {
-      "favicon": "./assets/icon.png"
+      "favicon": "./App/assets/icon.png"
     },
-    "plugins": [
-      "expo-font"
+    "plugins":[
+      [
+        "expo-font",
+        {
+          "fonts": ["./App/assets/fonts/Playwrite.ttf"]
+        }
+      ]
     ]
   }
 }

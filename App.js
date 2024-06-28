@@ -204,27 +204,22 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function CustomDrawerContent(props) {
+function CustomDrawerContent(props)  {
   return (
-    <DrawerContentScrollView {...props}>
+    <DrawerContentScrollView {...props}style={styles.drawerContent}>
       <DrawerItemList {...props} />
-      <DrawerItem label="Donate" onPress={() => props.navigation.navigate('DonateScreen')} />
-      <DrawerItem label="About Us" onPress={() => props.navigation.navigate('AboutUsScreen')} />
     </DrawerContentScrollView>
   );
 }
-
 function App() {
   return (
     <NavigationContainer>
       <Drawer.Navigator
         drawerContent={props => <CustomDrawerContent {...props} />}
-        drawerStyle={{
-          backgroundColor: 'tan', // Change background color here
-        }}
+        style={styles.Home}
       >
         <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Courses" component={CoursesStack} />
+        <Drawer.Screen name="Course" component={CoursesStack} />
         <Drawer.Screen name="DonateScreen" component={DonateScreen} />
         <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
         <Drawer.Screen name="ResourcesScreen" component={ResourcesScreen} />
@@ -236,7 +231,7 @@ function App() {
 function CoursesStack() {
   return (
     <Stack.Navigator>
-      <Stack.Screen name="Courses" component={CoursesScreen} />
+      <Stack.Screen name="Courses Available" component={CoursesScreen} />
       <Stack.Screen name="Course1Screen" component={Course1Screen} />
       <Stack.Screen name="Course2Screen" component={Course2Screen} />
       <Stack.Screen name="Course3Screen" component={Course3Screen} />
@@ -268,6 +263,9 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     marginHorizontal: 5,
+  },
+  Home:{
+    color:'tan'
   },
   container: {
     flex: 1,
