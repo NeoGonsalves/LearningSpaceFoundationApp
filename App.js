@@ -1,30 +1,32 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
+import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
-import YoutubePlayer from 'react-native-youtube-iframe';
+import { Video, AVPlaybackStatus } from 'expo-av';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
+
 const sampleCourses = [
-  { name: 'Course 1', screen: 'Course1Screen' },
-  { name: 'Course 2', screen: 'Course2Screen' },
-  { name: 'Course 3', screen: 'Course3Screen' },
-  { name: 'Course 4', screen: 'Course4Screen' },
+  { name: 'Course 1', screen: 'Course1' },
+  { name: 'Course 2', screen: 'Course2' },
+  { name: 'Course 3', screen: 'Course3' },
+  { name: 'Course 4', screen: 'Course4' },
 ];
 
 function Course1Screen() {
   return (
-    <View style={styles.ResourcesScreen}>
-      <YoutubePlayer
-      height={300}
-      play={true}
-      videoId={'E5_ccmHk_TY'}
-    />
+    <View style={styles.container}>
+      <Video
+        source={{ uri: 'https://drive.google.com/uc?id=1DqYfYKfvWVG09LP3ekoWYZaUX8qY7ipk&export=download' }}
+        style={styles.video}
+        useNativeControls
+        resizeMode="contain"
+      />
     </View>
   );
 }
@@ -71,7 +73,6 @@ function DonateScreen() {
     </ScrollView>
   );
 }
-
 function AboutUsScreen() {
   return (
     <SafeAreaView>
@@ -204,13 +205,26 @@ function HomeScreen({ navigation }) {
   );
 }
 
-function CustomDrawerContent(props)  {
+function CustomDrawerContent(props) {
   return (
-    <DrawerContentScrollView {...props}style={styles.drawerContent}>
+    <DrawerContentScrollView {...props} style={styles.drawerContent}>
       <DrawerItemList {...props} />
     </DrawerContentScrollView>
   );
 }
+
+function CoursesStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Courses" component={CoursesScreen} />
+      <Stack.Screen name="Course1" component={Course1Screen} />
+      <Stack.Screen name="Course2" component={Course2Screen} />
+      <Stack.Screen name="Course3" component={Course3Screen} />
+      <Stack.Screen name="Course4" component={Course4Screen} />
+    </Stack.Navigator>
+  );
+}
+
 function App() {
   return (
     <NavigationContainer>
@@ -219,24 +233,12 @@ function App() {
         style={styles.Home}
       >
         <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Course" component={CoursesStack} />
+        <Drawer.Screen name="Courses" component={CoursesStack} />
         <Drawer.Screen name="DonateScreen" component={DonateScreen} />
         <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
         <Drawer.Screen name="ResourcesScreen" component={ResourcesScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
-  );
-}
-
-function CoursesStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Courses Available" component={CoursesScreen} />
-      <Stack.Screen name="Course1Screen" component={Course1Screen} />
-      <Stack.Screen name="Course2Screen" component={Course2Screen} />
-      <Stack.Screen name="Course3Screen" component={Course3Screen} />
-      <Stack.Screen name="Course4Screen" component={Course4Screen} />
-    </Stack.Navigator>
   );
 }
 
@@ -344,6 +346,10 @@ const styles = StyleSheet.create({
     backgroundColor: 'tan',
     paddingTop: 10,
     margin: 20,
+  },
+  video: {
+    width: '100%',
+    height: 200,
   },
 });
 
