@@ -10,12 +10,6 @@ import { Video, AVPlaybackStatus } from 'expo-av';
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
 
-const data = [
-  "Q:Are you ready? Yes",
-  "url:<https://drive.google.com/uc?id=1DqYfYKfvWVG09LP3ekoWYZaUX8qY7ipk&export=download>",
-  "Q:Did you watch the video? Yes/No",
-];
-
 
 const sampleCourses = [
   { name: 'Course 1', screen: 'Course1' },
@@ -40,12 +34,7 @@ function Course1Screen() {
 function Course2Screen() {
   return (
     <View style={styles.ResourcesScreen}>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
+      <Text>Course 2 Content</Text>
     </View>
   );
 }
@@ -53,12 +42,7 @@ function Course2Screen() {
 function Course3Screen() {
   return (
     <View style={styles.ResourcesScreen}>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DyveSneu4wfJPbxVsWhoE3-Sqn1PaspF&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
+      <Text>Course 3 Content</Text>
     </View>
   );
 }
@@ -66,12 +50,7 @@ function Course3Screen() {
 function Course4Screen() {
   return (
     <View style={styles.ResourcesScreen}>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1E2y7pa8rBXh6cU9sHtX_A46pFTpg5DEjk&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
+      <Text>Course 4 Content</Text>
     </View>
   );
 }
@@ -266,9 +245,9 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: 'center',
-    //alignItems: 'center',
-    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'tan',
     paddingVertical: 20,
   },
   imageContainer: {
@@ -282,13 +261,13 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'tan',
   },
   scrollView: {
     marginHorizontal: 5,
   },
   Home:{
-    color:'white'
+    color:'tan'
   },
   container: {
     flex: 1,
@@ -298,7 +277,7 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 18,
-    color: 'black',
+    color: 'antiquewhite',
     marginBottom: 10,
     textAlign: 'center',
   },
@@ -306,7 +285,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   donateButton: {
-    backgroundColor: 'antiquewhite',
+    backgroundColor: 'wheat',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
@@ -318,7 +297,7 @@ const styles = StyleSheet.create({
   },
   searchContainer: {
     padding: 10,
-    backgroundColor: 'white',
+    backgroundColor: 'tan',
   },
   searchBar: {
     height: 40,
@@ -327,7 +306,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     borderRadius: 5,
     marginBottom: 10,
-    backgroundColor: 'white',
+    backgroundColor: 'wheat',
   },
   courseItem: {
     padding: 10,
@@ -340,7 +319,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'tan',
     paddingTop: 0,
     margin: 0,
   },
@@ -353,7 +332,7 @@ const styles = StyleSheet.create({
   },
   AboutUsScreentxt: {
     fontSize: 16,
-    color: 'black',
+    color: 'antiquewhite',
     paddingLeft: 10,
     paddingRight: 10,
     marginBottom: 20,
@@ -364,7 +343,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'tan',
     paddingTop: 10,
     margin: 20,
   },
