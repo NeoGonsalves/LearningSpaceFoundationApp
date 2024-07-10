@@ -53,13 +53,7 @@ function Course2Screen() {
 function Course3Screen() {
   return (
     <SafeAreaView style={styles.container}>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DqYfYKfvWVG09LP3ekoWYZaUX8qY7ipk&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
-      <QuizScreen paddingTop='20 '/>
+      <QuizScreen/>
     </SafeAreaView>
   );
 }
