@@ -42,14 +42,9 @@ function Course2Screen() {
 
 function Course3Screen() {
   return (
-    <View style={styles.ResourcesScreen}>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DyveSneu4wfJPbxVsWhoE3-Sqn1PaspF&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
-    </View>
+    <SafeAreaView style={styles.container}>
+      <QuizScreen/>
+    </SafeAreaView>
   );
 }
 
