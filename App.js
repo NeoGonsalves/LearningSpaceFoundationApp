@@ -6,6 +6,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
 import { Video, AVPlaybackStatus } from 'expo-av';
+import QuizScreen from './QuizScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -42,7 +43,12 @@ function Course2Screen() {
 function Course3Screen() {
   return (
     <View style={styles.ResourcesScreen}>
-      <Text>Course 3 Content</Text>
+      <Video
+        source={{ uri: 'https://drive.google.com/uc?id=1DyveSneu4wfJPbxVsWhoE3-Sqn1PaspF&export=download' }}
+        style={styles.video}
+        useNativeControls
+        resizeMode="contain"
+      />
     </View>
   );
 }

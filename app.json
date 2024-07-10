@@ -25,13 +25,20 @@
     "web": {
       "favicon": "./App/assets/icon.png"
     },
-    "plugins":[
+    "plugins": [
       [
         "expo-font",
         {
-          "fonts": ["./App/assets/fonts/Playwrite.ttf"]
+          "fonts": [
+            "./App/assets/fonts/Playwrite.ttf"
+          ]
         }
       ]
-    ]
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "8ae0714a-e306-4b63-9e74-bbf912a59b43"
+      }
+    }
   }
 }
