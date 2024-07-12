@@ -7,6 +7,7 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
 import { Video, AVPlaybackStatus } from 'expo-av';
 import QuizScreen from './QuizScreen';
+import CircleBackground from './background'
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -22,20 +23,28 @@ const sampleCourses = [
 function Course1Screen() {
   return (
     <View style={styles.container}>
+      <CircleBackground>
       <Video
         source={{ uri: 'https://drive.google.com/uc?id=1DqYfYKfvWVG09LP3ekoWYZaUX8qY7ipk&export=download' }}
         style={styles.video}
         useNativeControls
         resizeMode="contain"
       />
+      </CircleBackground>
     </View>
   );
 }
 
-function Course2Screen() {
+function Course2Screen({ navigation }) {
   return (
     <View style={styles.ResourcesScreen}>
-      <Text>Course 2 Content</Text>
+      <Video
+        useNativeControls
+        resizeMode="contain"
+      />
+      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
+        <Text style={styles.quizButtonText}>Go to Quiz</Text>
+      </TouchableOpacity>
     </View>
   );
 }
