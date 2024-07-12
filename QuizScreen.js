@@ -1,42 +1,29 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Alert, TouchableOpacity } from 'react-native';
-import { Video } from 'expo-av';
 
 const QuizScreen = () => {
   const questions = [
     { questionText: 'It was Sunday on Jan 1, 2006. What was the day of the week Jan 1, 2010?', answerOptions: ['A. Sunday', 'B. Saturday', 'C. Friday', 'D. Friday'], correctAnswer: 'C. Friday' },
-    // Add more questions here
+    { questionText: 'It was Sunday on Jan 1, 2006. What was the day of the week Jan 1, 2010?', answerOptions: ['A. Sunday', 'B. Saturday', 'C. Friday', 'D. Friday'], correctAnswer: 'C. Friday' },
+    { questionText: 'It was Sunday on Jan 1, 2006. What was the day of the week Jan 1, 2010?', answerOptions: ['A. Sunday', 'B. Saturday', 'C. Friday', 'D. Friday'], correctAnswer: 'C. Friday' },
+    { questionText: 'It was Sunday on Jan 1, 2006. What was the day of the week Jan 1, 2010?', answerOptions: ['A. Sunday', 'B. Saturday', 'C. Friday', 'D. Friday'], correctAnswer: 'C. Friday' },
   ];
 
   const [currentQuestion, setCurrentQuestion] = useState(0);
-  const [showVideo, setShowVideo] = useState(false);
-  const videoRef = useRef(null);
+  const [score, setScore] = useState(0);
 
   const handleAnswerOptionClick = (answer) => {
     const correctAnswer = questions[currentQuestion].correctAnswer;
     if (answer === correctAnswer) {
-      if (currentQuestion === 0) {
-        setShowVideo(true);
-      } else {
-        const nextQuestion = currentQuestion + 1;
-        if (nextQuestion < questions.length) {
-          setCurrentQuestion(nextQuestion);
-        } else {
-          Alert.alert('Quiz Completed', 'You have completed the quiz!');
-        }
-      }
-    } else {
-      Alert.alert('Incorrect Answer', 'Try Again!');
-    }
-  };
-
-  const handlePlaybackStatusUpdate = (status) => {
-    if (status.didJustFinish) {
-      setShowVideo(false);
+      setScore(score + 1);
       const nextQuestion = currentQuestion + 1;
       if (nextQuestion < questions.length) {
         setCurrentQuestion(nextQuestion);
+      } else {
+        Alert.alert('Quiz Completed', `You have completed the quiz! Your score is ${score + 1}`);
       }
+    } else {
+      Alert.alert('Incorrect Answer', 'Try Again!');
     }
   };
 
@@ -44,27 +31,14 @@ const QuizScreen = () => {
     <View style={styles.container}>
       <View style={styles.progressContainer}>
         <Text style={styles.progressText}>Question {currentQuestion + 1} of {questions.length}</Text>
+        <Text style={styles.progressText}>Score: {score}</Text>
       </View>
-      {!showVideo ? (
-        <>
-          <Text style={styles.questionText}>{questions[currentQuestion].questionText}</Text>
-          {questions[currentQuestion].answerOptions.map((answerOption, index) => (
-            <TouchableOpacity key={index} style={styles.answerButton} onPress={() => handleAnswerOptionClick(answerOption)}>
-              <Text style={styles.answerText}>{answerOption}</Text>
-            </TouchableOpacity>
-          ))}
-        </>
-      ) : (
-        <Video
-          ref={videoRef}
-          source={{ uri: 'https://drive.google.com/uc?id=1DqYfYKfvWVG09LP3ekoWYZaUX8qY7ipk&export=download' }}
-          style={styles.video}
-          useNativeControls
-          resizeMode="contain"
-          shouldPlay
-          onPlaybackStatusUpdate={handlePlaybackStatusUpdate}
-        />
-      )}
+      <Text style={styles.questionText}>  { questions[currentQuestion].questionText}</Text>
+      {questions[currentQuestion].answerOptions.map((answerOption, index) => (
+        <TouchableOpacity key={index} style={styles.answerButton} onPress={() => handleAnswerOptionClick(answerOption)}>
+          <Text style={styles.answerText}>{answerOption}</Text>
+        </TouchableOpacity>
+      ))}
     </View>
   );
 };
@@ -101,12 +75,6 @@ const styles = StyleSheet.create({
   answerText: {
     color: '#fff',
     fontSize: 16,
-  },
-  video: {
-    width: '100%',
-    height: 200,
-    marginTop: 20,
-    backgroundColor: 'black',
   },
 });
 

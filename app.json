@@ -5,7 +5,7 @@
     "description": "This is an Application for the Learning Space Foundation NGO",
     "version": "1.0.0",
     "orientation": "default",
-    "icon": "./App/assets/icon.png",
+    "icon": "./App/assets/icons.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./App/assets/splash.png",

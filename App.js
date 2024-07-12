@@ -5,17 +5,11 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
-import { Video, AVPlaybackStatus } from 'expo-av';
+import { Video } from 'expo-av';
 import QuizScreen from './QuizScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
-
-const data = [
-  "Q:Are you ready? Yes",
-  "url:<https://drive.google.com/uc?id=1DqYfYKfvWVG09LP3ekoWYZaUX8qY7ipk&export=download>",
-  "Q:Did you watch the video? Yes/No",
-];
 
 const sampleCourses = [
   { name: 'Course 1', screen: 'Course1' },
@@ -37,7 +31,7 @@ function Course1Screen() {
   );
 }
 
-function Course2Screen() {
+function Course2Screen({ navigation }) {
   return (
     <View style={styles.ResourcesScreen}>
       <Video
@@ -46,6 +40,9 @@ function Course2Screen() {
         useNativeControls
         resizeMode="contain"
       />
+      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
+        <Text style={styles.quizButtonText}>Go to Quiz</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -89,6 +86,7 @@ function DonateScreen() {
     </ScrollView>
   );
 }
+
 function AboutUsScreen() {
   return (
     <SafeAreaView>
@@ -211,48 +209,37 @@ function HomeScreen({ navigation }) {
             Our other areas of work include menstrual hygiene management, supporting education and raising awareness on mental health & safety of women. We conduct various awareness sessions, provide support with infrastructure and basic needs to the less privileged.
           </Text>
 
-          <TouchableOpacity onPress={() => navigation.navigate('DonateScreen')} style={styles.donateButton}>
-            <Text style={styles.donateButtonText}>Make A Diffrence</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Donate')} style={styles.donateButton}>
+            <Text style={styles.donateButtonText}>Make A Difference</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <StatusBar barStyle="dark-content" backgroundColor="tan" />
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
     </SafeAreaView>
   );
 }
 
-function CustomDrawerContent(props) {
-  return (
-    <DrawerContentScrollView {...props} style={styles.drawerContent}>
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
-  );
-}
 
-function CoursesStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Courses" component={CoursesScreen} />
-      <Stack.Screen name="Course1" component={Course1Screen} />
-      <Stack.Screen name="Course2" component={Course2Screen} />
-      <Stack.Screen name="Course3" component={Course3Screen} />
-      <Stack.Screen name="Course4" component={Course4Screen} />
-    </Stack.Navigator>
-  );
-}
+const CoursesStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Courses" component={CoursesScreen} />
+    <Stack.Screen name="Course1" component={Course1Screen} />
+    <Stack.Screen name="Course2" component={Course2Screen} />
+    <Stack.Screen name="Course3" component={Course3Screen} />
+    <Stack.Screen name="Course4" component={Course4Screen} />
+    <Stack.Screen name="QuizScreen" component={QuizScreen} />
+  </Stack.Navigator>
+);
 
 function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator
-        drawerContent={props => <CustomDrawerContent {...props} />}
-        style={styles.Home}
-      >
+      <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Courses" component={CoursesStack} />
-        <Drawer.Screen name="DonateScreen" component={DonateScreen} />
-        <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
-        <Drawer.Screen name="ResourcesScreen" component={ResourcesScreen} />
+        <Drawer.Screen name="Course" component={CoursesStack} />
+        <Drawer.Screen name="Donate" component={DonateScreen} />
+        <Drawer.Screen name="About Us" component={AboutUsScreen} />
+        <Drawer.Screen name="Resources" component={ResourcesScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -261,8 +248,6 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    //justifyContent: 'center',
-    //alignItems: 'center',
     backgroundColor: 'white',
     paddingVertical: 20,
   },
@@ -282,14 +267,8 @@ const styles = StyleSheet.create({
   scrollView: {
     marginHorizontal: 5,
   },
-  Home:{
-    color:'white'
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
+  Home: {
+    color: 'white'
   },
   text: {
     fontSize: 18,
@@ -310,6 +289,18 @@ const styles = StyleSheet.create({
   donateButtonText: {
     color: 'black',
     fontSize: 16,
+  },
+  quizButton: {
+    marginTop: 20,
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  quizButtonText: {
+    color: 'black',
+    fontSize: 18,
+    textAlign: 'center',
   },
   searchContainer: {
     padding: 10,
@@ -342,7 +333,7 @@ const styles = StyleSheet.create({
   titles: {
     fontWeight: 'bold',
     fontSize: 24,
-    color: 'white',
+    color: 'black',
     paddingTop: 20,
     paddingBottom: 20,
   },
@@ -353,7 +344,6 @@ const styles = StyleSheet.create({
     paddingRight: 10,
     marginBottom: 20,
     textAlign: 'center',
-    fontFamily: 'Playwrite',
   },
   ResourcesScreen: {
     flex: 1,
