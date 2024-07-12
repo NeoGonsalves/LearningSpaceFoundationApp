@@ -5,11 +5,12 @@ import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
-import { Video } from 'expo-av';
+import { Video, AVPlaybackStatus } from 'expo-av';
 import QuizScreen from './QuizScreen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
+
 
 const sampleCourses = [
   { name: 'Course 1', screen: 'Course1' },
@@ -31,18 +32,10 @@ function Course1Screen() {
   );
 }
 
-function Course2Screen({ navigation }) {
+function Course2Screen() {
   return (
     <View style={styles.ResourcesScreen}>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
-      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
-        <Text style={styles.quizButtonText}>Go to Quiz</Text>
-      </TouchableOpacity>
+      <Text>Course 2 Content</Text>
     </View>
   );
 }
@@ -58,12 +51,7 @@ function Course3Screen() {
 function Course4Screen() {
   return (
     <View style={styles.ResourcesScreen}>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1E2y7pa8rBXh6cU9sHtX_A46pFTpg5DEjk&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
+      <Text>Course 4 Content</Text>
     </View>
   );
 }
@@ -86,7 +74,6 @@ function DonateScreen() {
     </ScrollView>
   );
 }
-
 function AboutUsScreen() {
   return (
     <SafeAreaView>
@@ -209,37 +196,48 @@ function HomeScreen({ navigation }) {
             Our other areas of work include menstrual hygiene management, supporting education and raising awareness on mental health & safety of women. We conduct various awareness sessions, provide support with infrastructure and basic needs to the less privileged.
           </Text>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Donate')} style={styles.donateButton}>
-            <Text style={styles.donateButtonText}>Make A Difference</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('DonateScreen')} style={styles.donateButton}>
+            <Text style={styles.donateButtonText}>Make A Diffrence</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <StatusBar barStyle="dark-content" backgroundColor="white" />
+      <StatusBar barStyle="dark-content" backgroundColor="tan" />
     </SafeAreaView>
   );
 }
 
+function CustomDrawerContent(props) {
+  return (
+    <DrawerContentScrollView {...props} style={styles.drawerContent}>
+      <DrawerItemList {...props} />
+    </DrawerContentScrollView>
+  );
+}
 
-const CoursesStack = () => (
-  <Stack.Navigator>
-    <Stack.Screen name="Courses" component={CoursesScreen} />
-    <Stack.Screen name="Course1" component={Course1Screen} />
-    <Stack.Screen name="Course2" component={Course2Screen} />
-    <Stack.Screen name="Course3" component={Course3Screen} />
-    <Stack.Screen name="Course4" component={Course4Screen} />
-    <Stack.Screen name="QuizScreen" component={QuizScreen} />
-  </Stack.Navigator>
-);
+function CoursesStack() {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="Courses" component={CoursesScreen} />
+      <Stack.Screen name="Course1" component={Course1Screen} />
+      <Stack.Screen name="Course2" component={Course2Screen} />
+      <Stack.Screen name="Course3" component={Course3Screen} />
+      <Stack.Screen name="Course4" component={Course4Screen} />
+    </Stack.Navigator>
+  );
+}
 
 function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator initialRouteName="Home">
+      <Drawer.Navigator
+        drawerContent={props => <CustomDrawerContent {...props} />}
+        style={styles.Home}
+      >
         <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Course" component={CoursesStack} />
-        <Drawer.Screen name="Donate" component={DonateScreen} />
-        <Drawer.Screen name="About Us" component={AboutUsScreen} />
-        <Drawer.Screen name="Resources" component={ResourcesScreen} />
+        <Drawer.Screen name="Courses" component={CoursesStack} />
+        <Drawer.Screen name="DonateScreen" component={DonateScreen} />
+        <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
+        <Drawer.Screen name="ResourcesScreen" component={ResourcesScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -248,7 +246,9 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: 'white',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'tan',
     paddingVertical: 20,
   },
   imageContainer: {
@@ -262,17 +262,23 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-    backgroundColor: 'white',
+    backgroundColor: 'tan',
   },
   scrollView: {
     marginHorizontal: 5,
   },
-  Home: {
-    color: 'white'
+  Home:{
+    color:'tan'
+  },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 20,
   },
   text: {
     fontSize: 18,
-    color: 'black',
+    color: 'antiquewhite',
     marginBottom: 10,
     textAlign: 'center',
   },
@@ -280,7 +286,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   donateButton: {
-    backgroundColor: 'antiquewhite',
+    backgroundColor: 'wheat',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
@@ -290,21 +296,9 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
   },
-  quizButton: {
-    marginTop: 20,
-    backgroundColor: 'white',
-    paddingVertical: 10,
-    paddingHorizontal: 20,
-    borderRadius: 5,
-  },
-  quizButtonText: {
-    color: 'black',
-    fontSize: 18,
-    textAlign: 'center',
-  },
   searchContainer: {
     padding: 10,
-    backgroundColor: 'white',
+    backgroundColor: 'tan',
   },
   searchBar: {
     height: 40,
@@ -313,7 +307,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     borderRadius: 5,
     marginBottom: 10,
-    backgroundColor: 'white',
+    backgroundColor: 'wheat',
   },
   courseItem: {
     padding: 10,
@@ -326,30 +320,31 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'tan',
     paddingTop: 0,
     margin: 0,
   },
   titles: {
     fontWeight: 'bold',
     fontSize: 24,
-    color: 'black',
+    color: 'white',
     paddingTop: 20,
     paddingBottom: 20,
   },
   AboutUsScreentxt: {
     fontSize: 16,
-    color: 'black',
+    color: 'antiquewhite',
     paddingLeft: 10,
     paddingRight: 10,
     marginBottom: 20,
     textAlign: 'center',
+    fontFamily: 'Playwrite',
   },
   ResourcesScreen: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: 'tan',
     paddingTop: 10,
     margin: 20,
   },
