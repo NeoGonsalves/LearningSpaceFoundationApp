@@ -4,9 +4,10 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
+import { StyleSheet, Dimensions, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
 import { Video } from 'expo-av';
 import QuizScreen from './QuizScreen';
+import TileScrollingReanimated from './tileScroll';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -21,12 +22,6 @@ const sampleCourses = [
 function Course1Screen() {
   return (
     <View style={styles.container}>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DqYfYKfvWVG09LP3ekoWYZaUX8qY7ipk&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
     </View>
   );
 }
@@ -169,7 +164,7 @@ function CoursesScreen({ navigation }) {
 function ResourcesScreen() {
   return (
     <View style={styles.ResourcesScreen}>
-      <Text>Resource Screen</Text>
+     <TileScrollingReanimated/>
     </View>
   );
 }
@@ -353,9 +348,15 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     margin: 20,
   },
+  circleBackground: {
+    position: 'absolute',
+    zIndex: 1, // Ensure the background is behind the video
+  },
   video: {
+    flex: 1,
+    zIndex: 2, // Ensure the video is on top of the background
     width: '100%',
-    height: 200,
+    height: '100%',
   },
 });
 
