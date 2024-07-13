@@ -19,9 +19,18 @@ const sampleCourses = [
   { name: 'Course 4', screen: 'Course4' },
 ];
 
-function Course1Screen() {
+function Course1Screen({ navigation }) {
   return (
-    <View style={styles.container}>
+    <View style={styles.ResourcesScreen}>
+      <Video
+        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
+        style={styles.video}
+        useNativeControls
+        resizeMode="contain"
+      />
+      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
+        <Text style={styles.quizButtonText}>Go to Quiz</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -42,23 +51,36 @@ function Course2Screen({ navigation }) {
   );
 }
 
-function Course3Screen() {
+function Course3Screen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <QuizScreen/>
-    </SafeAreaView>
-  );
-}
-
-function Course4Screen() {
-  return (
-    <View style={styles.ResourcesScreen}>
+      <View style={styles.ResourcesScreen}>
       <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1E2y7pa8rBXh6cU9sHtX_A46pFTpg5DEjk&export=download' }}
+        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
         style={styles.video}
         useNativeControls
         resizeMode="contain"
       />
+      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
+        <Text style={styles.quizButtonText}>Go to Quiz</Text>
+      </TouchableOpacity>
+    </View>
+    </SafeAreaView>
+  );
+}
+
+function Course4Screen({ navigation }) {
+  return (
+    <View style={styles.ResourcesScreen}>
+      <Video
+        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
+        style={styles.video}
+        useNativeControls
+        resizeMode="contain"
+      />
+      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
+        <Text style={styles.quizButtonText}>Go to Quiz</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -350,11 +372,11 @@ const styles = StyleSheet.create({
   },
   circleBackground: {
     position: 'absolute',
-    zIndex: 1, // Ensure the background is behind the video
+    zIndex: 1, 
   },
   video: {
     flex: 1,
-    zIndex: 2, // Ensure the video is on top of the background
+    zIndex: 2, 
     width: '100%',
     height: '100%',
   },
