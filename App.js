@@ -4,14 +4,13 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
-import { Video, AVPlaybackStatus } from 'expo-av';
+import { StyleSheet, Dimensions, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
+import { Video } from 'expo-av';
 import QuizScreen from './QuizScreen';
-import CircleBackground from './background'
+import TileScrolling2Reanimated from './tileScroll';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
-
 
 const sampleCourses = [
   { name: 'Course 1', screen: 'Course1' },
@@ -20,25 +19,13 @@ const sampleCourses = [
   { name: 'Course 4', screen: 'Course4' },
 ];
 
-function Course1Screen() {
-  return (
-    <View style={styles.container}>
-      <CircleBackground>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DqYfYKfvWVG09LP3ekoWYZaUX8qY7ipk&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
-      </CircleBackground>
-    </View>
-  );
-}
+function Course1Screen({ navigation }) {
 
-function Course2Screen({ navigation }) {
   return (
     <View style={styles.ResourcesScreen}>
       <Video
+        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
+        style={styles.video}
         useNativeControls
         resizeMode="contain"
       />
@@ -49,18 +36,52 @@ function Course2Screen({ navigation }) {
   );
 }
 
-function Course3Screen() {
+function Course2Screen({ navigation }) {
+  return (
+    <View style={styles.ResourcesScreen}>
+      <Video
+        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
+        style={styles.video}
+        useNativeControls
+        resizeMode="contain"
+      />
+      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
+        <Text style={styles.quizButtonText}>Go to Quiz</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+function Course3Screen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
-      <QuizScreen/>
+      <View style={styles.ResourcesScreen}>
+      <Video
+        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
+        style={styles.video}
+        useNativeControls
+        resizeMode="contain"
+      />
+      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
+        <Text style={styles.quizButtonText}>Go to Quiz</Text>
+      </TouchableOpacity>
+    </View>
     </SafeAreaView>
   );
 }
 
-function Course4Screen() {
+function Course4Screen({ navigation }) {
   return (
     <View style={styles.ResourcesScreen}>
-      <Text>Course 4 Content</Text>
+      <Video
+        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
+        style={styles.video}
+        useNativeControls
+        resizeMode="contain"
+      />
+      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
+        <Text style={styles.quizButtonText}>Go to Quiz</Text>
+      </TouchableOpacity>
     </View>
   );
 }
@@ -83,6 +104,7 @@ function DonateScreen() {
     </ScrollView>
   );
 }
+
 function AboutUsScreen() {
   return (
     <SafeAreaView>
@@ -165,7 +187,7 @@ function CoursesScreen({ navigation }) {
 function ResourcesScreen() {
   return (
     <View style={styles.ResourcesScreen}>
-      <Text>Resource Screen</Text>
+     <TileScrolling2Reanimated />
     </View>
   );
 }
@@ -205,48 +227,37 @@ function HomeScreen({ navigation }) {
             Our other areas of work include menstrual hygiene management, supporting education and raising awareness on mental health & safety of women. We conduct various awareness sessions, provide support with infrastructure and basic needs to the less privileged.
           </Text>
 
-          <TouchableOpacity onPress={() => navigation.navigate('DonateScreen')} style={styles.donateButton}>
-            <Text style={styles.donateButtonText}>Make A Diffrence</Text>
+          <TouchableOpacity onPress={() => navigation.navigate('Donate')} style={styles.donateButton}>
+            <Text style={styles.donateButtonText}>Make A Difference</Text>
           </TouchableOpacity>
         </View>
       </ScrollView>
-      <StatusBar barStyle="dark-content" backgroundColor="tan" />
+      <StatusBar barStyle="dark-content" backgroundColor="white" />
     </SafeAreaView>
   );
 }
 
-function CustomDrawerContent(props) {
-  return (
-    <DrawerContentScrollView {...props} style={styles.drawerContent}>
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
-  );
-}
 
-function CoursesStack() {
-  return (
-    <Stack.Navigator>
-      <Stack.Screen name="Courses" component={CoursesScreen} />
-      <Stack.Screen name="Course1" component={Course1Screen} />
-      <Stack.Screen name="Course2" component={Course2Screen} />
-      <Stack.Screen name="Course3" component={Course3Screen} />
-      <Stack.Screen name="Course4" component={Course4Screen} />
-    </Stack.Navigator>
-  );
-}
+const CoursesStack = () => (
+  <Stack.Navigator>
+    <Stack.Screen name="Courses" component={CoursesScreen} />
+    <Stack.Screen name="Course1" component={Course1Screen} />
+    <Stack.Screen name="Course2" component={Course2Screen} />
+    <Stack.Screen name="Course3" component={Course3Screen} />
+    <Stack.Screen name="Course4" component={Course4Screen} />
+    <Stack.Screen name="QuizScreen" component={QuizScreen} />
+  </Stack.Navigator>
+);
 
 function App() {
   return (
     <NavigationContainer>
-      <Drawer.Navigator
-        drawerContent={props => <CustomDrawerContent {...props} />}
-        style={styles.Home}
-      >
+      <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Courses" component={CoursesStack} />
-        <Drawer.Screen name="DonateScreen" component={DonateScreen} />
-        <Drawer.Screen name="AboutUsScreen" component={AboutUsScreen} />
-        <Drawer.Screen name="ResourcesScreen" component={ResourcesScreen} />
+        <Drawer.Screen name="Course" component={CoursesStack} />
+        <Drawer.Screen name="Donate" component={DonateScreen} />
+        <Drawer.Screen name="About Us" component={AboutUsScreen} />
+        <Drawer.Screen name="Resources" component={ResourcesScreen} />
       </Drawer.Navigator>
     </NavigationContainer>
   );
@@ -255,9 +266,7 @@ function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'tan',
+    backgroundColor: 'white',
     paddingVertical: 20,
   },
   imageContainer: {
@@ -271,23 +280,17 @@ const styles = StyleSheet.create({
   },
   safeArea: {
     flex: 1,
-    backgroundColor: 'tan',
+    backgroundColor: 'white',
   },
   scrollView: {
     marginHorizontal: 5,
   },
-  Home:{
-    color:'tan'
-  },
-  container: {
-    flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 20,
+  Home: {
+    color: 'white'
   },
   text: {
     fontSize: 18,
-    color: 'antiquewhite',
+    color: 'black',
     marginBottom: 10,
     textAlign: 'center',
   },
@@ -295,7 +298,7 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   donateButton: {
-    backgroundColor: 'wheat',
+    backgroundColor: 'antiquewhite',
     padding: 10,
     borderRadius: 5,
     alignItems: 'center',
@@ -305,9 +308,21 @@ const styles = StyleSheet.create({
     color: 'black',
     fontSize: 16,
   },
+  quizButton: {
+    marginTop: 20,
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 5,
+  },
+  quizButtonText: {
+    color: 'black',
+    fontSize: 18,
+    textAlign: 'center',
+  },
   searchContainer: {
     padding: 10,
-    backgroundColor: 'tan',
+    backgroundColor: 'white',
   },
   searchBar: {
     height: 40,
@@ -316,7 +331,7 @@ const styles = StyleSheet.create({
     paddingLeft: 10,
     borderRadius: 5,
     marginBottom: 10,
-    backgroundColor: 'wheat',
+    backgroundColor: 'white',
   },
   courseItem: {
     padding: 10,
@@ -329,37 +344,42 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'tan',
+    backgroundColor: 'white',
     paddingTop: 0,
     margin: 0,
   },
   titles: {
     fontWeight: 'bold',
     fontSize: 24,
-    color: 'white',
+    color: 'black',
     paddingTop: 20,
     paddingBottom: 20,
   },
   AboutUsScreentxt: {
     fontSize: 16,
-    color: 'antiquewhite',
+    color: 'black',
     paddingLeft: 10,
     paddingRight: 10,
     marginBottom: 20,
     textAlign: 'center',
-    fontFamily: 'Playwrite',
   },
   ResourcesScreen: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'tan',
+    backgroundColor: 'white',
     paddingTop: 10,
     margin: 20,
   },
+  circleBackground: {
+    position: 'absolute',
+    zIndex: 1, 
+  },
   video: {
+    flex: 1,
+    zIndex: 2, 
     width: '100%',
-    height: 200,
+    height: '100%',
   },
 });
 
