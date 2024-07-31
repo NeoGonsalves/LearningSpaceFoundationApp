@@ -1,17 +1,15 @@
-import React, { useImperativeHandle, useRef, forwardRef } from 'react';
+import React, { useImperativeHandle, useRef, forwardRef, useState } from 'react';
 import { View, StyleSheet, Button, Alert, Text } from 'react-native';
 import { Video, ResizeMode } from 'expo-av';
-
-// Import quiz questions from the JSON file
-import quizQuestions from './quizQuestions.json';
+import courseStruct from './courseStruct.json'; // Import your JSON structure
 
 const VideoPlayer = forwardRef((props, ref) => {
   const video = useRef(null);
-  const [status, setStatus] = React.useState({});
-  const [showQuiz, setShowQuiz] = React.useState(false);
-  const [currentQuestionIndex, setCurrentQuestionIndex] = React.useState(0);
-  const [selectedOption, setSelectedOption] = React.useState(null);
+  const [status, setStatus] = useState({});
+  const [currentElementIndex, setCurrentElementIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
 
+  // Use useImperativeHandle to control video playback externally
   useImperativeHandle(ref, () => ({
     play: () => {
       video.current.playAsync();
@@ -24,61 +22,93 @@ const VideoPlayer = forwardRef((props, ref) => {
     }
   }));
 
+  // Handle video playback status update
   const onPlaybackStatusUpdate = (status) => {
     setStatus(() => status);
     if (status.didJustFinish) {
-      handleVideoEnd();
+      handleNext();
     }
   };
 
-  const handleVideoEnd = () => {
-    setShowQuiz(true);
+  // Handle moving to the next element in the course structure
+  const handleNext = () => {
+    const currentElement = courseStruct.elements[currentElementIndex];
+    if (currentElement.type === 'Question') {
+      // Check if the selected option is correct
+      if (selectedOption?.trim() === currentElement.Answer.trim()) {
+        // Move to the next element
+        if (currentElementIndex < courseStruct.elements.length - 1) {
+          setCurrentElementIndex(currentElementIndex + 1);
+          setSelectedOption(null);
+        } else {
+          Alert.alert('Quiz completed!');
+        }
+      } else {
+        Alert.alert('Incorrect answer. Please try again.');
+      }
+    } else {
+      // Move to the next element if not a question
+      if (currentElementIndex < courseStruct.elements.length - 1) {
+        setCurrentElementIndex(currentElementIndex + 1);
+        setSelectedOption(null);
+      } else {
+        Alert.alert('Course completed!');
+      }
+    }
   };
 
+  // Handle option selection for questions
   const handleOptionPress = (option) => {
     setSelectedOption(option);
   };
 
-  const handleNextQuestion = () => {
-    if (currentQuestionIndex < quizQuestions.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-      setSelectedOption(null);
-    } else {
-      Alert.alert('Quiz completed');
-    }
-  };
+  // Determine the current element from the JSON structure
+  const currentElement = courseStruct.elements[currentElementIndex];
 
-  if (showQuiz) {
-    const currentQuestion = quizQuestions[currentQuestionIndex];
+  // Render video player if the current element is a video
+  if (currentElement.type === 'video') {
     return (
       <View style={styles.container}>
-        <Text style={styles.question}>{currentQuestion.question}</Text>
-        {currentQuestion.options.map((option) => (
-          <Button
-            key={option}
-            title={option}
-            onPress={() => handleOptionPress(option)}
-            color={selectedOption === option ? 'blue' : 'gray'}
-          />
-        ))}
-        <Button title="Next" onPress={handleNextQuestion} />
+        <Video
+          ref={video}
+          style={styles.video}
+          source={{ uri: currentElement.url }}
+          useNativeControls
+          resizeMode={ResizeMode.CONTAIN}
+          isLooping
+          onPlaybackStatusUpdate={onPlaybackStatusUpdate}
+        />
+        <Button title="Next" onPress={handleNext} />
       </View>
     );
   }
 
+  // Render quiz questions if the current element is a question
+  if (currentElement.type === 'Question') {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.question}>{currentElement.Question}</Text>
+        {currentElement.Answers.map((answer) => (
+          <Button
+            key={answer}
+            title={answer}
+            onPress={() => handleOptionPress(answer)}
+            color={selectedOption === answer ? 'blue' : 'gray'}
+          />
+        ))}
+        <Button
+          title="Next"
+          onPress={handleNext}
+          disabled={selectedOption === null} // Ensure an answer is selected
+        />
+      </View>
+    );
+  }
+
+  // Fallback render if there are no elements
   return (
     <View style={styles.container}>
-      <Video
-        ref={video}
-        style={styles.video}
-        source={{
-          uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
-        }}
-        useNativeControls
-        resizeMode={ResizeMode.CONTAIN}
-        isLooping
-        onPlaybackStatusUpdate={onPlaybackStatusUpdate}
-      />
+      <Text style={styles.question}>No more elements.</Text>
     </View>
   );
 });

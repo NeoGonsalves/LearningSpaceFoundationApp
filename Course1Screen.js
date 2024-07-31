@@ -1,95 +1,89 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, Alert, Button } from 'react-native';
-import Video from './Videoplayer';
-import questionsData from './courseStruct.json';
+import { View, Text, Button, StyleSheet, Alert } from 'react-native';
+import VideoPlayer from './Videoplayer'; // Ensure the path is correct
+import courseStruct from './courseStruct.json'; // Import the JSON structure
 
-const Course1Screen = ({ navigation }) => {
-  const video = React.useRef(null);
-  const [status, setStatus] = React.useState({});
-  const [currentElementIndex, setCurrentElementIndex] = React.useState(0);
-  const [selectedOption, setSelectedOption] = React.useState(null);
-  const [showVideo, setShowVideo] = React.useState(false);
+const Course1Screen = () => {
+  const [currentElementIndex, setCurrentElementIndex] = useState(0);
+  const [selectedOption, setSelectedOption] = useState(null);
+  const [quizCompleted, setQuizCompleted] = useState(false);
 
-  // Extract elements from JSON
-  const elements = questionsData.elements;
+  // Get the current element from the JSON data
+  const currentElement = courseStruct.elements[currentElementIndex];
 
-  const onPlaybackStatusUpdate = (status) => {
-    setStatus(() => status);
-    if (status.didJustFinish) {
-      handleVideoEnd();
-    }
-  };
-
-  const handleVideoEnd = () => {
-    setShowVideo(false);
-    setCurrentElementIndex(currentElementIndex + 1); // Move to the next question after video
-  };
-
+  // Handle option selection
   const handleOptionPress = (option) => {
     setSelectedOption(option);
   };
 
+  // Move to the next element
   const handleNext = () => {
-    const currentElement = elements[currentElementIndex];
-
     if (currentElement.type === 'Question') {
-      // Trim and normalize both selectedOption and correct Answer for comparison
-      const normalizedSelectedOption = selectedOption?.trim().toLowerCase();
-      const normalizedCorrectAnswer = currentElement.Answer.trim().toLowerCase();
-
-      console.log('Selected:', normalizedSelectedOption);
-      console.log('Correct:', normalizedCorrectAnswer);
-
-      if (normalizedSelectedOption === normalizedCorrectAnswer) {
-        // Correct answer, proceed to the next element
-        setCurrentElementIndex(currentElementIndex + 1);
-        setSelectedOption(null);
+      // Check if the selected option matches the correct answer
+      if (selectedOption?.trim() === currentElement.Answer.trim()) {
+        // Correct answer, move to the next element
+        if (currentElementIndex < courseStruct.elements.length - 1) {
+          setCurrentElementIndex(currentElementIndex + 1);
+          setSelectedOption(null); // Reset selection for the next question
+        } else {
+          setQuizCompleted(true);
+          Alert.alert('Quiz completed!');
+        }
       } else {
-        Alert.alert('Wrong answer, please try again.');
+        Alert.alert('Incorrect answer. Please try again.');
+      }
+    } else {
+      // Move to the next element if it is not a question
+      if (currentElementIndex < courseStruct.elements.length - 1) {
+        setCurrentElementIndex(currentElementIndex + 1);
+        setSelectedOption(null); // Reset selection
+      } else {
+        setQuizCompleted(true);
+        Alert.alert('Course completed!');
       }
     }
   };
 
-  const currentElement = elements[currentElementIndex];
-
-  // Render Question
-  if (currentElement.type === 'Question' && !showVideo) {
+  // Render video
+  if (currentElement.type === 'video') {
     return (
       <View style={styles.container}>
-        <Text style={styles.questionText}>{currentElement.Question}</Text>
-        {currentElement.Answers.map((option) => (
+        <VideoPlayer
+          uri={currentElement.url}
+          onEnd={() => handleNext()} // Proceed to next element when video ends
+        />
+      </View>
+    );
+  }
+
+  // Render quiz question
+  if (currentElement.type === 'Question') {
+    return (
+      <View style={styles.container}>
+        <Text style={styles.question}>{currentElement.Question}</Text>
+        {currentElement.Answers.map((answer) => (
           <Button
-            key={option}
-            title={option}
-            onPress={() => handleOptionPress(option)}
-            color={selectedOption === option ? 'blue' : 'gray'}
+            key={answer}
+            title={answer}
+            onPress={() => handleOptionPress(answer)}
+            color={selectedOption === answer ? 'blue' : 'gray'}
           />
         ))}
-        <Button title="Next" onPress={handleNext} />
-      </View>
-    );
-  }
-
-  // Render Video
-  if (currentElement.type === 'video' || showVideo) {
-    return (
-      <View style={styles.container}>
-        <Video
-          ref={video}
-          style={styles.video}
-          source={{
-            uri: currentElement.url,
-          }}
-          useNativeControls
-          onPlaybackStatusUpdate={onPlaybackStatusUpdate}
-          isLooping={false}
+        <Button
+          title="Next"
+          onPress={handleNext}
+          disabled={selectedOption === null} // Ensure an answer is selected before proceeding
         />
-        <Button title="Proceed to Next" onPress={handleVideoEnd} disabled={!status.didJustFinish} />
       </View>
     );
   }
 
-  return null; // In case there's an issue, return null (or handle it as needed)
+  // Render completion message or any default fallback
+  return quizCompleted ? (
+    <View style={styles.container}>
+      <Text style={styles.question}>Congratulations! You've completed the course.</Text>
+    </View>
+  ) : null;
 };
 
 const styles = StyleSheet.create({
@@ -100,14 +94,9 @@ const styles = StyleSheet.create({
     padding: 20,
     backgroundColor: 'white',
   },
-  questionText: {
+  question: {
     fontSize: 18,
-    marginBottom: 10,
-    textAlign: 'center',
-  },
-  video: {
-    width: '100%',
-    height: 300,
+    marginBottom: 20,
   },
 });
 

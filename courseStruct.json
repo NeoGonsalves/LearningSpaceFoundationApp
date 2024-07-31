@@ -18,6 +18,12 @@
             "type":"video",
             "url":"https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download"
             
+        },
+        {
+            "type":"Question",
+            "Question":"Did you watch the video ??  ",
+            "Answers":["Yes","No"],
+            "Answer":"Yes"
         }
     ]
 
