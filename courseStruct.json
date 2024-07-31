@@ -1,6 +1,7 @@
 {
     "elements":
     [
+        
         {
             "type":"Question",
             "Question":"Are You Ready ",
@@ -17,18 +18,6 @@
             "type":"video",
             "url":"https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download"
             
-        },
-        {
-            "type":"Question",
-            "Question":"Have you watched the video ?",
-            "Answers":[" Yes "," no "," Not Sure "],
-            "Answer":"Yes"
-        },
-        {
-            "type":"Question",
-            "Question":"Are You Ready ",
-            "Answers":[" Yes "," no "," Not Sure "],
-            "Answer":"Yes"
         }
     ]
 

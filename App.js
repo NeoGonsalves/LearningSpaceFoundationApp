@@ -1,13 +1,31 @@
 import 'react-native-gesture-handler';
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
+import {
+  createDrawerNavigator,
+  DrawerContentScrollView,
+  DrawerItemList,
+} from '@react-navigation/drawer';
 import { createStackNavigator } from '@react-navigation/stack';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Dimensions, Text, SafeAreaView, Image, View, Alert, TouchableOpacity, ScrollView, Linking, FlatList, TextInput } from 'react-native';
+import {
+  StyleSheet,
+  Dimensions,
+  Text,
+  SafeAreaView,
+  Image,
+  View,
+  Alert,
+  TouchableOpacity,
+  ScrollView,
+  Linking,
+  FlatList,
+  TextInput,
+} from 'react-native';
 import { Video } from 'expo-av';
 import QuizScreen from './QuizScreen';
 import TileScrolling2Reanimated from './tileScroll';
+import Course1Screen from './Course1Screen';
 
 const Drawer = createDrawerNavigator();
 const Stack = createStackNavigator();
@@ -19,33 +37,20 @@ const sampleCourses = [
   { name: 'Course 4', screen: 'Course4' },
 ];
 
-function Course1Screen({ navigation }) {
-
-  return (
-    <View style={styles.ResourcesScreen}>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
-      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
-        <Text style={styles.quizButtonText}>Go to Quiz</Text>
-      </TouchableOpacity>
-    </View>
-  );
-}
-
 function Course2Screen({ navigation }) {
   return (
     <View style={styles.ResourcesScreen}>
       <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
+        source={{
+          uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download',
+        }}
         style={styles.video}
         useNativeControls
         resizeMode="contain"
       />
-      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('QuizScreen')}
+        style={styles.quizButton}>
         <Text style={styles.quizButtonText}>Go to Quiz</Text>
       </TouchableOpacity>
     </View>
@@ -56,16 +61,20 @@ function Course3Screen({ navigation }) {
   return (
     <SafeAreaView style={styles.container}>
       <View style={styles.ResourcesScreen}>
-      <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
-        style={styles.video}
-        useNativeControls
-        resizeMode="contain"
-      />
-      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
-        <Text style={styles.quizButtonText}>Go to Quiz</Text>
-      </TouchableOpacity>
-    </View>
+        <Video
+          source={{
+            uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download',
+          }}
+          style={styles.video}
+          useNativeControls
+          resizeMode="contain"
+        />
+        <TouchableOpacity
+          onPress={() => navigation.navigate('QuizScreen')}
+          style={styles.quizButton}>
+          <Text style={styles.quizButtonText}>Go to Quiz</Text>
+        </TouchableOpacity>
+      </View>
     </SafeAreaView>
   );
 }
@@ -74,12 +83,16 @@ function Course4Screen({ navigation }) {
   return (
     <View style={styles.ResourcesScreen}>
       <Video
-        source={{ uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download' }}
+        source={{
+          uri: 'https://drive.google.com/uc?id=1DxaKdn1NhvBSW-aLVrcXPe2jhPW0iz3u&export=download',
+        }}
         style={styles.video}
         useNativeControls
         resizeMode="contain"
       />
-      <TouchableOpacity onPress={() => navigation.navigate('QuizScreen')} style={styles.quizButton}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate('QuizScreen')}
+        style={styles.quizButton}>
         <Text style={styles.quizButtonText}>Go to Quiz</Text>
       </TouchableOpacity>
     </View>
@@ -92,12 +105,12 @@ function DonateScreen() {
       <View style={styles.imageContainer}>
         <Image
           source={require('./App/assets/QRDonation.png')}
-          resizeMode='contain'
+          resizeMode="contain"
           style={styles.image}
         />
         <Image
           source={require('./App/assets/DonateDetails.png')}
-          resizeMode='contain'
+          resizeMode="contain"
           style={styles.image}
         />
       </View>
@@ -110,28 +123,72 @@ function AboutUsScreen() {
     <SafeAreaView>
       <ScrollView>
         <View style={styles.AboutUsScreen}>
-          <Image style={styles.image}
+          <Image
+            style={styles.image}
             resizeMode="contain"
             fadeDuration={3000}
             source={require('./App/assets/ourworkimg.jpg')}
           />
           <Text style={styles.titles}>HOW WE STARTED</Text>
           <Text style={styles.AboutUsScreentxt}>
-            Learning Space started in 2014 as a charitable organization by conviction. The founder being an engineer, academia and trainer with 20+ years of experience in the IT industry in the US and India and IIIT-H, our journey started as the training cum implementation partner for a 2-year Science, Technology, Engineering and Mathematics (STEM) project for 16 Rainbow Homes in the twin cities of Hyderabad and Secunderabad. This project aimed at improving learning abilities of ~1300 children taking shelter in these orphanages using technology aided teaching and learning.
-
-            Later, we handled training and implementation of another STEM project for about 12,000 less privileged students studying at 88 government primary, upper-primary and high schools of Nampally and Khairatabad Mandals in Hyderabad. We also worked with some other NGOs such as Move the Wheel Foundation, Association for Promoting Social Action (APSA) and Suma Niketan in the field of education.
+            Learning Space started in 2014 as a charitable organization by
+            conviction. The founder being an engineer, academia and trainer with
+            20+ years of experience in the IT industry in the US and India and
+            IIIT-H, our journey started as the training cum implementation
+            partner for a 2-year Science, Technology, Engineering and
+            Mathematics (STEM) project for 16 Rainbow Homes in the twin cities
+            of Hyderabad and Secunderabad. This project aimed at improving
+            learning abilities of ~1300 children taking shelter in these
+            orphanages using technology aided teaching and learning. Later, we
+            handled training and implementation of another STEM project for
+            about 12,000 less privileged students studying at 88 government
+            primary, upper-primary and high schools of Nampally and Khairatabad
+            Mandals in Hyderabad. We also worked with some other NGOs such as
+            Move the Wheel Foundation, Association for Promoting Social Action
+            (APSA) and Suma Niketan in the field of education.
           </Text>
-          <Text style={styles.titles}>HOW FOCUS SHIFTED TO PREVENTION OF CSA.</Text>
-          <Image style={styles.image}
-            fadeDuration={3000}
-            source={require('./App/assets/ourwork2.jpg')}
-          />
+          <Text style={styles.titles}>
+            HOW FOCUS SHIFTED TO PREVENTION OF CSA.
+          </Text>
+          
           <Text style={styles.AboutUsScreentxt}>
-            During that period, a child sexual abuse crisis came to light which made us wonder why services were only available after a child was abused. Also, there is a lot stigma around this issue which makes the survivors suffer in silence and which makes the perpetrators take advantage of this stigma and silence. Our founder asked herself a question: “what can I do to prevent abuse and keep children safe?” She mobilized a few volunteers to create an initiative around educating children about personal safety. In Dec 2018, Learning Space Foundation was registered as a public charitable trust. We then mobilized more like-minded people and started working with students from various schools for one year, until pandemic occurred. There was no access to children due to the lockdowns and schools having online classes etc. The Child helpline in India received many calls from children and it triggered a lot of conversations around safety of children who are trapped at homes along with their abusers. That is when we realized the need to find other ways to stop child sexual abuse. Also, as abuse is a power dynamic where more powerful person forces themselves upon a less powerful person, children being less powerful, educating them to protect themselves is really not enough. As adults are legally and morally responsible for the health and safety of the children, burden of prevention and protection is the responsibility of adults. So, we refined our mission to include adult education, we started our flagship training, ‘Sreyobhilaashi.’ We aim to empower adults and organizations to bring best practices in child safety in their own communities.
-
-            While were working with schools, another incident came to light. Chotu (name changed to protect privacy) is an intelligent youth, but unaware of the child marriage act and POCSO, married a minor girl against elders’ wish and landed in jail. Most of them being first generation learners, they have little knowledge about law and how their actions and decisions can destroy their dignity and future. So, we realized the need to create awareness among adolescents about laws related to them.
-
-            We envision a world where child sexual abuse does not exist and children live with dignity. We believe prevention is possible if we all come together. We dream of the day that adults have formed prevention-oriented communities where children’s rights to a safe childhood are protected.
+            During that period, a child sexual abuse crisis came to light which
+            made us wonder why services were only available after a child was
+            abused. Also, there is a lot stigma around this issue which makes
+            the survivors suffer in silence and which makes the perpetrators
+            take advantage of this stigma and silence. Our founder asked herself
+            a question: “what can I do to prevent abuse and keep children safe?”
+            She mobilized a few volunteers to create an initiative around
+            educating children about personal safety. In Dec 2018, Learning
+            Space Foundation was registered as a public charitable trust. We
+            then mobilized more like-minded people and started working with
+            students from various schools for one year, until pandemic occurred.
+            There was no access to children due to the lockdowns and schools
+            having online classes etc. The Child helpline in India received many
+            calls from children and it triggered a lot of conversations around
+            safety of children who are trapped at homes along with their
+            abusers. That is when we realized the need to find other ways to
+            stop child sexual abuse. Also, as abuse is a power dynamic where
+            more powerful person forces themselves upon a less powerful person,
+            children being less powerful, educating them to protect themselves
+            is really not enough. As adults are legally and morally responsible
+            for the health and safety of the children, burden of prevention and
+            protection is the responsibility of adults. So, we refined our
+            mission to include adult education, we started our flagship
+            training, ‘Sreyobhilaashi.’ We aim to empower adults and
+            organizations to bring best practices in child safety in their own
+            communities. While were working with schools, another incident came
+            to light. Chotu (name changed to protect privacy) is an intelligent
+            youth, but unaware of the child marriage act and POCSO, married a
+            minor girl against elders’ wish and landed in jail. Most of them
+            being first generation learners, they have little knowledge about
+            law and how their actions and decisions can destroy their dignity
+            and future. So, we realized the need to create awareness among
+            adolescents about laws related to them. We envision a world where
+            child sexual abuse does not exist and children live with dignity. We
+            believe prevention is possible if we all come together. We dream of
+            the day that adults have formed prevention-oriented communities
+            where children’s rights to a safe childhood are protected.
           </Text>
         </View>
       </ScrollView>
@@ -146,7 +203,7 @@ function CoursesScreen({ navigation }) {
   const handleSearch = (text) => {
     setQuery(text);
     if (text) {
-      const newData = sampleCourses.filter(course => {
+      const newData = sampleCourses.filter((course) => {
         const courseData = course.name.toUpperCase();
         const textData = text.toUpperCase();
         return courseData.indexOf(textData) > -1;
@@ -187,7 +244,7 @@ function CoursesScreen({ navigation }) {
 function ResourcesScreen() {
   return (
     <View style={styles.ResourcesScreen}>
-     <TileScrolling2Reanimated />
+      <TileScrolling2Reanimated />
     </View>
   );
 }
@@ -195,14 +252,17 @@ function ResourcesScreen() {
 function HomeScreen({ navigation }) {
   const handleDonatePress = () => {
     Alert.alert(
-      "Want to explore more about the Learning Space Foundation?",
+      'Want to explore more about the Learning Space Foundation?',
       null,
       [
         {
           text: 'Absolutely',
-          onPress: () => Linking.openURL('https://www.youtube.com/watch?v=pHekp0tRrDA&pp=ygUibGVhcm5pbmcgc3BhY2UgZm91bmRhdGlvbiBoeWRyYWJhZA%3D%3D')
+          onPress: () =>
+            Linking.openURL(
+              'https://www.youtube.com/watch?v=pHekp0tRrDA&pp=ygUibGVhcm5pbmcgc3BhY2UgZm91bmRhdGlvbiBoeWRyYWJhZA%3D%3D'
+            ),
         },
-        { text: 'No, thanks.' }
+        { text: 'No, thanks.' },
       ]
     );
   };
@@ -211,7 +271,9 @@ function HomeScreen({ navigation }) {
     <SafeAreaView style={styles.safeArea}>
       <ScrollView style={styles.scrollView}>
         <View style={styles.container}>
-          <TouchableOpacity onPress={handleDonatePress} style={styles.touchableOpacity}>
+          <TouchableOpacity
+            onPress={handleDonatePress}
+            style={styles.touchableOpacity}>
             <Image
               fadeDuration={3000}
               source={require('./App/assets/Learning-Space-Logo-for-WebSite-Yellow.png')}
@@ -220,14 +282,23 @@ function HomeScreen({ navigation }) {
             />
           </TouchableOpacity>
           <Text style={styles.text}>
-            Learning Space Foundation is a registered public charitable trust striving to advance children’s and women’s rights for safety, education and health, thus creating a lasting impact in the lives of vulnerable children, women and their communities.
-
-            Our major focus area is prevention of Child Sexual Abuse (CSA). We provide personal safety education to children and empower adults to prevent, recognize, and react responsibly to child sexual abuse through awareness, education, and stigma reduction.
-
-            Our other areas of work include menstrual hygiene management, supporting education and raising awareness on mental health & safety of women. We conduct various awareness sessions, provide support with infrastructure and basic needs to the less privileged.
+            Learning Space Foundation is a registered public charitable trust
+            striving to advance children’s and women’s rights for safety,
+            education and health, thus creating a lasting impact in the lives of
+            vulnerable children, women and their communities. Our major focus
+            area is prevention of Child Sexual Abuse (CSA). We provide personal
+            safety education to children and empower adults to prevent,
+            recognize, and react responsibly to child sexual abuse through
+            awareness, education, and stigma reduction. Our other areas of work
+            include menstrual hygiene management, supporting education and
+            raising awareness on mental health & safety of women. We conduct
+            various awareness sessions, provide support with infrastructure and
+            basic needs to the less privileged.
           </Text>
 
-          <TouchableOpacity onPress={() => navigation.navigate('Donate')} style={styles.donateButton}>
+          <TouchableOpacity
+            onPress={() => navigation.navigate('Donate')}
+            style={styles.donateButton}>
             <Text style={styles.donateButtonText}>Make A Difference</Text>
           </TouchableOpacity>
         </View>
@@ -237,10 +308,9 @@ function HomeScreen({ navigation }) {
   );
 }
 
-
 const CoursesStack = () => (
   <Stack.Navigator>
-    <Stack.Screen name="Courses" component={CoursesScreen} />
+    <Stack.Screen name="List Of Courses" component={CoursesScreen} />
     <Stack.Screen name="Course1" component={Course1Screen} />
     <Stack.Screen name="Course2" component={Course2Screen} />
     <Stack.Screen name="Course3" component={Course3Screen} />
@@ -254,7 +324,7 @@ function App() {
     <NavigationContainer>
       <Drawer.Navigator initialRouteName="Home">
         <Drawer.Screen name="Home" component={HomeScreen} />
-        <Drawer.Screen name="Course" component={CoursesStack} />
+        <Drawer.Screen name="Courses" component={CoursesStack} />
         <Drawer.Screen name="Donate" component={DonateScreen} />
         <Drawer.Screen name="About Us" component={AboutUsScreen} />
         <Drawer.Screen name="Resources" component={ResourcesScreen} />
@@ -286,7 +356,7 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
   },
   Home: {
-    color: 'white'
+    color: 'white',
   },
   text: {
     fontSize: 18,
@@ -373,11 +443,11 @@ const styles = StyleSheet.create({
   },
   circleBackground: {
     position: 'absolute',
-    zIndex: 1, 
+    zIndex: 1,
   },
   video: {
     flex: 1,
-    zIndex: 2, 
+    zIndex: 2,
     width: '100%',
     height: '100%',
   },
