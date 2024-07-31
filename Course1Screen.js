@@ -1,62 +1,47 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { View, Text, Button, StyleSheet, Alert } from 'react-native';
-import VideoPlayer from './Videoplayer'; // Ensure the path is correct
+import VideoPlayer from './Videoplayer'; // Ensure this component is correctly imported
 import courseStruct from './courseStruct.json'; // Import the JSON structure
 
 const Course1Screen = () => {
+  const videoRef = useRef(null);
   const [currentElementIndex, setCurrentElementIndex] = useState(0);
   const [selectedOption, setSelectedOption] = useState(null);
-  const [quizCompleted, setQuizCompleted] = useState(false);
 
-  // Get the current element from the JSON data
-  const currentElement = courseStruct.elements[currentElementIndex];
-
-  // Handle option selection
-  const handleOptionPress = (option) => {
-    setSelectedOption(option);
-  };
-
-  // Move to the next element
-  const handleNext = () => {
+  const handleNextElement = () => {
+    const currentElement = courseStruct.elements[currentElementIndex];
+    
+    // Handle answer validation and element progression
     if (currentElement.type === 'Question') {
-      // Check if the selected option matches the correct answer
       if (selectedOption?.trim() === currentElement.Answer.trim()) {
-        // Correct answer, move to the next element
+        // Move to the next element if the answer is correct
         if (currentElementIndex < courseStruct.elements.length - 1) {
           setCurrentElementIndex(currentElementIndex + 1);
-          setSelectedOption(null); // Reset selection for the next question
+          setSelectedOption(null);
         } else {
-          setQuizCompleted(true);
-          Alert.alert('Quiz completed!');
+          Alert.alert('Course completed!');
         }
       } else {
         Alert.alert('Incorrect answer. Please try again.');
       }
     } else {
-      // Move to the next element if it is not a question
+      // Move to the next element if it's not a question
       if (currentElementIndex < courseStruct.elements.length - 1) {
         setCurrentElementIndex(currentElementIndex + 1);
-        setSelectedOption(null); // Reset selection
+        setSelectedOption(null);
       } else {
-        setQuizCompleted(true);
         Alert.alert('Course completed!');
       }
     }
   };
 
-  // Render video
-  if (currentElement.type === 'video') {
-    return (
-      <View style={styles.container}>
-        <VideoPlayer
-          uri={currentElement.url}
-          onEnd={() => handleNext()} // Proceed to next element when video ends
-        />
-      </View>
-    );
-  }
+  const handleOptionPress = (option) => {
+    setSelectedOption(option);
+  };
 
-  // Render quiz question
+  const currentElement = courseStruct.elements[currentElementIndex];
+
+  // Conditional rendering based on element type
   if (currentElement.type === 'Question') {
     return (
       <View style={styles.container}>
@@ -71,19 +56,27 @@ const Course1Screen = () => {
         ))}
         <Button
           title="Next"
-          onPress={handleNext}
-          disabled={selectedOption === null} // Ensure an answer is selected before proceeding
+          onPress={handleNextElement}
+          disabled={selectedOption === null} // Disable next button until an option is selected
         />
       </View>
     );
+  } else if (currentElement.type === 'video') {
+    return (
+      <VideoPlayer
+        ref={videoRef}
+        source={{ uri: currentElement.url }}
+        onEnd={handleNextElement} // Advance to the next element after video ends
+      />
+    );
   }
 
-  // Render completion message or any default fallback
-  return quizCompleted ? (
+  // Fallback in case no elements are present
+  return (
     <View style={styles.container}>
-      <Text style={styles.question}>Congratulations! You've completed the course.</Text>
+      <Text>No more content available.</Text>
     </View>
-  ) : null;
+  );
 };
 
 const styles = StyleSheet.create({
@@ -96,7 +89,8 @@ const styles = StyleSheet.create({
   },
   question: {
     fontSize: 18,
-    marginBottom: 20,
+    marginBottom: 16,
+    textAlign: 'center',
   },
 });
 
